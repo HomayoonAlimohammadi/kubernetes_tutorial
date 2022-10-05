@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  django:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes: 
+      - ./test_project:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres_db
+    container_name: DjangoApp
+  
+  postgres_db:
+    image: "postgres:12.12"
+    volumes:
+      - ./postgres_db:/var/lib/postgresql/data
+    env_file: 
+      - ./.env
+    container_name: PostgresDB
+  
+volumes:
+  postgres_db:
