@@ -2,7 +2,7 @@ version: '3'
 
 services:
   django:
-    build: .
+    image: registry.cafebazaar.ir:5000/homayoon.alimohammadi/onboarding/django_test:1.0
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"

@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: django-deployment
+  name: postgres-deployment
   labels:
-    app: django
+    app: postgres
     owner: homayoon
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: django
+      app: postgres
       owner: homayoon
   template:
     metadata:
       labels:
-        app: django
+        app: postgres
         owner: homayoon
     spec:
       containers:
-      - name: django
-        image: homayoonalimohammadi/django_test:1.0
+      - name: postgres
+        image: postgres:12.12
         env: 
           - name: "POSTGRES_DB"
             valueFrom: 
@@ -36,18 +36,8 @@ spec:
               secretKeyRef:
                 name: django-secret
                 key: postgres-password
-          - name: "POSTGRES_HOST"
-            valueFrom: 
-              secretKeyRef:
-                name: django-secret
-                key: postgres-host
-          - name: "POSTGRES_PORT"
-            valueFrom: 
-              secretKeyRef:
-                name: django-secret
-                key: postgres-port
         ports:
-        - containerPort: 8000
+        - containerPort: 5432
         resources: 
           limits: 
             cpu: "200m"
@@ -59,13 +49,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-service
+  name: postgres-service
 spec:
   selector:
-    app: django
+    app: postgres
     owner: homayoon
   ports:
     - name: http
       protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 5432
+      targetPort: 5432
